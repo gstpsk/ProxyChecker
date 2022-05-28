@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"net/http"
 	"net/url"
@@ -24,7 +23,8 @@ func checkProxy(proxyString string, urlString string) (bool, int) {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 
-	timestampStart := time.Now().UnixNano() / int64(time.Millisecond)
+	timestampStart := time.Now().UnixNano() / int64(time.Millisecond) // Start request
+
 	// Send the request
 	resp, err := client.Do(req.WithContext(ctx))
 	if err != nil {
@@ -32,9 +32,9 @@ func checkProxy(proxyString string, urlString string) (bool, int) {
 		return false, 0
 	}
 	defer resp.Body.Close()
-	timestampFinish := time.Now().UnixNano() / int64(time.Millisecond)
-	timeDiff := timestampFinish - timestampStart
-	fmt.Printf("%dms", timeDiff)
+
+	timestampFinish := time.Now().UnixNano() / int64(time.Millisecond) // End request
+	timeDiff := timestampFinish - timestampStart                       // Calc diff
 
 	if resp.StatusCode != 418 {
 		return false, int(timeDiff)
@@ -61,6 +61,6 @@ func createNewHTTPClient(proxyUrl *url.URL) *http.Client {
 		ProxyConnectHeader: http.Header{},
 	}
 
-	client := &http.Client{Transport: tr} // , Timeout: timeout
+	client := &http.Client{Transport: tr}
 	return client
 }

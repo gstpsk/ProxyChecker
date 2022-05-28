@@ -20,7 +20,7 @@ func worker() {
 	}
 }
 
-func StartWorkersAndWait() {
+func startWorkersAndWait() {
 	for i := 0; i < WorkerCount; i++ {
 		workerGroup.Add(1)
 		go worker()

@@ -39,7 +39,7 @@ func main() {
 	wg.Add(1)
 	go printProgress()
 
-	StartWorkersAndWait()
+	startWorkersAndWait()
 
 	close(resultsChan)
 	close(ch)
